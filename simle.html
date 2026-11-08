@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmileMate - Happiness Website</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fff1c9, #ffd9e8, #e6dcff);
+  min-height: 100vh;
+  color: #333;
+  transition: 0.4s;
+}
+
+header {
+  text-align: center;
+  padding: 25px 15px;
+}
+
+header h1 {
+  color: #ff6384;
+  font-size: 35px;
+}
+
+header p {
+  margin-top: 8px;
+  color: #666;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 15px;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px #0002;
+}
+
+.emoji {
+  font-size: 75px;
+  margin: 20px;
+}
+
+#message {
+  font-size: 22px;
+  color: #555;
+  margin: 20px auto;
+  min-height: 55px;
+  line-height: 1.5;
+}
+
+button, select {
+  padding: 12px 17px;
+  border: none;
+  border-radius: 20px;
+  margin: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button {
+  background: #ff7295;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+.secondary {
+  background: #9b83e9;
+}
+
+.green {
+  background: #55b99a;
+}
+
+.orange {
+  background: #f3a45e;
+}
+
+.counter {
+  margin: 20px;
+  font-size: 18px;
+  color: #e85c82;
+  font-weight: bold;
+}
+
+.section {
+  margin-top: 22px;
+  padding: 20px;
+  background: white;
+  border-radius: 18px;
+}
+
+.section h2 {
+  color: #e96991;
+  margin-bottom: 12px;
+}
+
+#favorites {
+  list-style: none;
+}
+
+#favorites li {
+  background: #fff0f5;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+#favorites li button {
+  padding: 7px 12px;
+}
+
+.tools {
+  text-align: center;
+  margin-top: 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+}
+
+/* DARK MODE */
+
+body.dark {
+  background: linear-gradient(135deg, #19172d, #352544);
+  color: white;
+}
+
+body.dark .card,
+body.dark .section {
+  background: #29263c;
+  color: white;
+}
+
+body.dark #message,
+body.dark header p {
+  color: #eee;
+}
+
+body.dark #favorites li {
+  background: #41334f;
+  color: white;
+}
+
+body.dark .section h2 {
+  color: #ff9ab6;
+}
+
+@media(max-width: 600px) {
+  header h1 {
+    font-size: 28px;
+  }
+
+  #message {
+    font-size: 18px;
+  }
+
+  button {
+    padding: 11px 13px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>😊 SmileMate</h1>
+  <p>Your Daily Dose of Happiness ❤️</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+
+    <h2>Welcome to SmileMate!</h2>
+
+    <div class="emoji" id="emoji">😊</div>
+
+    <p id="message">
+      Every day is a new opportunity to smile!
+    </p>
+
+    <select id="language" onchange="newSmile()">
+      <option value="en">English</option>
+      <option value="te">తెలుగు</option>
+    </select>
+
+    <br>
+
+    <button onclick="newSmile()">New Smile 😊</button>
+    <button class="secondary" onclick="changeColor()">
+      Change Color 🌈
+    </button>
+
+    <button class="green" onclick="copyMessage()">
+      Copy Message 📋
+    </button>
+
+    <button class="orange" onclick="speakMessage()">
+      Listen 🔊
+    </button>
+
+    <button class="secondary" onclick="shareMessage()">
+      Share 💌
+    </button>
+
+    <div class="counter">
+      😊 Smiles Generated: <span id="count">0</span>
+    </div>
+
+  </div>
+
+  <div class="section">
+
+    <h2>❤️ My Favourite Messages</h2>
+
+    <button onclick="addFavorite()" class="green">
+      Add to Favourites ⭐
+    </button>
+
+    <ul id="favorites"></ul>
+
+  </div>
+
+  <div class="tools">
+    <button class="secondary" onclick="toggleDark()">
+      🌙 Dark / Light Mode
+    </button>
+  </div>
+
+</div>
+
+<footer>
+  Made with ❤️ by SmileMate
+  <br>
+  Keep smiling and spread happiness! 😊
+</footer>
+
+<script>
+
+// MESSAGES
+
+const messages = [
+  {
+    en: "You are stronger than you think! 💪",
+    te: "నువ్వు అనుకున్నదానికంటే బలమైనవాడివి! 💪",
+    emoji: "💪"
+  },
+  {
+    en: "Keep smiling, beautiful things are coming! 🌸",
+    te: "నవ్వుతూ ఉండు, మంచి రోజులు వస్తాయి! 🌸",
+    emoji: "🌸"
+  },
+  {
+    en: "Believe in yourself! ❤️",
+    te: "నీ మీద నమ్మకం ఉంచు! ❤️",
+    emoji: "🥰"
+  },
+  {
+    en: "Today is your day! 🌈",
+    te: "ఈ రోజు నీదే! 🌈",
+    emoji: "🎉"
+  },
+  {
+    en: "Small steps create big success! ⭐",
+    te: "చిన్న అడుగులే పెద్ద విజయానికి దారి తీస్తాయి! ⭐",
+    emoji: "⭐"
+  },
+  {
+    en: "Never stop dreaming! ✨",
+    te: "కలలు కనడం ఎప్పుడూ ఆపకు! ✨",
+    emoji: "✨"
+  },
+  {
+    en: "You deserve happiness! 😊",
+    te: "నువ్వు ఆనందానికి అర్హుడివి! 😊",
+    emoji: "😊"
+  }
+];
+
+let currentMessage = messages[0];
+let smileCount = 0;
+
+const colors = [
+  "linear-gradient(135deg,#fff1c9,#ffd9e8)",
+  "linear-gradient(135deg,#a8e6cf,#dcedc1)",
+  "linear-gradient(135deg,#ffc3a0,#ffafbd)",
+  "linear-gradient(135deg,#a1c4fd,#c2e9fb)",
+  "linear-gradient(135deg,#d4a5ff,#fbc2eb)"
+];
+
+// GENERATE RANDOM MESSAGE
+
+function newSmile() {
+
+  let random = Math.floor(Math.random() * messages.length);
+
+  currentMessage = messages[random];
+
+  displayMessage();
+
+  smileCount++;
+
+  document.getElementById("count").innerText = smileCount;
+}
+
+// DISPLAY MESSAGE
+
+function displayMessage() {
+
+  let language = document.getElementById("language").value;
+
+  document.getElementById("message").innerText =
+    currentMessage[language];
+
+  document.getElementById("emoji").innerText =
+    currentMessage.emoji;
+}
+
+// CHANGE BACKGROUND COLOR
+
+function changeColor() {
+
+  let random = Math.floor(Math.random() * colors.length);
+
+  document.body.style.background = colors[random];
+}
+
+// COPY MESSAGE
+
+function copyMessage() {
+
+  let language = document.getElementById("language").value;
+  let text = currentMessage[language];
+
+  if (navigator.clipboard && window.isSecureContext) {
+
+    navigator.clipboard.writeText(text)
+      .then(() => alert("Message copied! ❤️"))
+      .catch(() => alert("Unable to copy message."));
+
+  } else {
+    alert("Clipboard is unavailable in this browser context.");
+  }
+}
+
+// VOICE MESSAGE
+
+function speakMessage() {
+
+  if (!("speechSynthesis" in window)) {
+    alert("Voice support is not available.");
+    return;
+  }
+
+  let language = document.getElementById("language").value;
+
+  let speech = new SpeechSynthesisUtterance(
+    currentMessage[language]
+  );
+
+  speech.lang = language === "te" ? "te-IN" : "en-IN";
+  speech.rate = 0.9;
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(speech);
+}
+
+// SHARE MESSAGE
+
+function shareMessage() {
+
+  let language = document.getElementById("language").value;
+  let text = currentMessage[language];
+
+  if (navigator.share) {
+
+    navigator.share({
+      title: "SmileMate",
+      text: text
+    }).catch(() => {});
+
+  } else {
+    copyMessage();
+  }
+}
+
+// FAVOURITE MESSAGES
+
+let favorites = [];
+
+function addFavorite() {
+
+  let language = document.getElementById("language").value;
+  let text = currentMessage[language];
+
+  if (favorites.includes(text)) {
+    alert("Already added to favourites! ❤️");
+    return;
+  }
+
+  favorites.push(text);
+
+  showFavorites();
+}
+
+function showFavorites() {
+
+  let list = document.getElementById("favorites");
+
+  list.innerHTML = "";
+
+  favorites.forEach((item, index) => {
+
+    let li = document.createElement("li");
+    let span = document.createElement("span");
+
+    span.textContent = item;
+
+    let remove = document.createElement("button");
+
+    remove.textContent = "Remove";
+
+    remove.onclick = function() {
+      favorites.splice(index, 1);
+      showFavorites();
+    };
+
+    li.appendChild(span);
+    li.appendChild(remove);
+
+    list.appendChild(li);
+
+  });
+}
+
+// DARK MODE
+
+function toggleDark() {
+
+  document.body.classList.toggle("dark");
+
+}
+
+</script>
+
+</body>
+</html>
